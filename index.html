@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Memory Board</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<style> 
+body{
+  background: url("https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2019/01/25-Bright-Neon-Color-Palettes4.jpg");
+  /*background-size: cover;
+  background-position: center;*/
+}
+#memory_board{
+    background: linear-gradient(#e847ae, #652ec7, #3b27ba);
+    background-size: cover;
+    background-postion: center;
+    border: #999 1px solid;
+    width:800px;
+    height:540px;
+    padding:24px;
+    margin:0px auto;
+}
+#memory_board > div{
+    background: #fff;
+    border: #000 1px solid;
+    width: 71px;
+    height: 71px;
+    float: left;
+    margin: 10px;
+    padding: 20px;
+    font-size: 64px;
+    cursor: pointer;
+    text-align: center;
+}
+</style>
+<script>
+var memory_array = ['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H','I', 'I','J','J','K','K','L','L'];
+var memory_values =[];
+var memory_tile_ids = [];
+var tiles_flipped = 0;
+Array.prototype.memory_tile_shuffle = function(){
+    var i = this.length, j, temp;
+    while(--i > 0){
+      j = Math.floor(Math.random() * (i+1));
+      temp = this[j];
+      this[j] = this[i];
+      this[i] = temp;
+    }
+}
+
+function newBoard(){
+        tiles_flipped = 0;
+        var output = '';
+  memory_array.memory_tile_shuffle();
+    for(var i = 0; i < memory_array.length; i++){
+            output += '<div id="tile_'+i+'"onclick="memoryFlipTile(this,\''+memory_array[i]+'\')"></div>';
+    }
+    document.getElementById('memory_board').innerHTML = output;
+}
+
+function memoryFlipTile(tile,val){
+    if(tile.innerHTML == "" && memory_values.length < 2){
+      tile.style.background = '#FFF';
+      tile.innerHTML = val;
+      if(memory_values.length == 0){
+              memory_values.push(val);
+              memory_tile_ids.push(tile.id);
+      } else if(memory_values.length == 1){
+              memory_values.push(val);
+              memory_tile_ids.push(tile.id);
+             if(memory_values[0] == memory_values[1]){
+                  tiles_flipped += 2;
+                  //clear both arrays
+                  memory_values =[];
+                     memory_tile_ids =[];
+              //check to see if the whole board is cleared
+              if(tiles_flipped == memory_array.length){
+                  alert("Board cleared... generating new board");
+                  document.getElementById('memory_board').innerHTML = "";
+                  newBoard();
+                }
+              }else {
+                function flip2Back(){
+                  //flipped the 2 tiles back over
+                  var tile_1 = document.getElementById(memory_tile_ids[0]);
+                  var tile_2 = document.getElementById(memory_tile_ids[1]);
+                  tile_1.style.background = 'url(https://images.unsplash.com/photo-1579790368487-58ced0672b96?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60) no-repeat';
+                        tile_1.innerHTML = "";
+                 tile_2.style.background = 'url(https://images.unsplash.com/photo-1579790368487-58ced0672b96?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60) no-repeat';
+                        tile_2.innerHTML = "";
+                //clear both arrays
+                memory_values = [];
+                      memory_tile_ids = [];
+              }
+              setTimeout (flip2Back, 700);
+           }
+       }
+    }
+}
+</script>
+	</head>
+<body>
+<div id="memory_board"></div>
+<script>newBoard();</script>
+</body>
+<!-- partial -->
+  
+</body>
+</html>
